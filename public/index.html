@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="fileManagerApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .navbar {
+            background-color: #111;
+        }
+        .table {
+            color: #fff;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #222;
+        }
+        .modal-content {
+            background-color: #111;
+            color: #fff;
+        }
+        .btn-outline-light:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body ng-controller="fileManagerController">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">File Explorer</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-3">
+            <div class="col">
+                <input type="text" class="form-control bg-dark text-light" id="directoryInput" placeholder="Enter directory path">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-light" onclick="listFiles()">List Files</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createModal">Create New</button>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Size</th>
+                    <th>Permissions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="fileList">
+                <!-- File list will be populated here -->
+                 {{v}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="newName" class="form-label">Name</label>
+                        <input type="text" class="form-control bg-dark text-light" id="newName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newType" class="form-label">Type</label>
+                        <select class="form-select bg-dark text-light" id="newType">
+                            <option value="file">File</option>
+                            <option value="folder">Folder</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="createNew()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    
+    <script>
+        function listFiles() {
+            const directory = document.getElementById('directoryInput').value;
+            // In a real application, this would make an AJAX call to the server
+            // For this example, we'll just populate with some dummy data
+            const files = [
+                { name: 'Document.pdf', type: 'file', size: '2.5 MB', permissions: 'rw-r--r--' },
+                { name: 'Images', type: 'folder', size: '-- MB', permissions: 'rwxr-xr-x' },
+                { name: 'script.js', type: 'file', size: '10 KB', permissions: 'rw-r--r--' }
+            ];
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                fileList.innerHTML += `
+                    <tr>
+                        <td>${file.name}</td>
+                        <td>${file.type}</td>
+                        <td>${file.size}</td>
+                        <td>${file.permissions}</td>
+                        <td><button class="btn btn-sm btn-outline-danger" onclick="deleteFile('${file.name}')">Delete</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function createNew() {
+            const name = document.getElementById('newName').value;
+            const type = document.getElementById('newType').value;
+            // In a real application, this would make an AJAX call to the server
+            alert(`Creating new ${type}: ${name}`);
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
+            modal.hide();
+        }
+
+        function deleteFile(name) {
+            // In a real application, this would make an AJAX call to the server
+            alert(`Deleting: ${name}`);
+        }
+    </script>
+</body>
+</html>
