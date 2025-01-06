@@ -38,10 +38,10 @@
     <div class="container mt-4">
         <div class="row mb-3">
             <div class="col">
-                <input type="text" class="form-control bg-dark text-light" id="directoryInput" placeholder="Enter directory path">
+                <input type="text" class="form-control bg-dark text-light" id="directoryInput" placeholder="Enter directory path" ng-model="path">
             </div>
             <div class="col-auto">
-                <button class="btn btn-outline-light" onclick="listFiles()">List Files</button>
+                <button class="btn btn-outline-light" ng-click="listFiles()">List Files</button>
             </div>
             <div class="col-auto">
                 <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createModal">Create New</button>
@@ -99,30 +99,6 @@
     <script src="assets/js/script.js"></script>
     
     <script>
-        function listFiles() {
-            const directory = document.getElementById('directoryInput').value;
-            // In a real application, this would make an AJAX call to the server
-            // For this example, we'll just populate with some dummy data
-            const files = [
-                { name: 'Document.pdf', type: 'file', size: '2.5 MB', permissions: 'rw-r--r--' },
-                { name: 'Images', type: 'folder', size: '-- MB', permissions: 'rwxr-xr-x' },
-                { name: 'script.js', type: 'file', size: '10 KB', permissions: 'rw-r--r--' }
-            ];
-            const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
-            files.forEach(file => {
-                fileList.innerHTML += `
-                    <tr>
-                        <td>${file.name}</td>
-                        <td>${file.type}</td>
-                        <td>${file.size}</td>
-                        <td>${file.permissions}</td>
-                        <td><button class="btn btn-sm btn-outline-danger" onclick="deleteFile('${file.name}')">Delete</button></td>
-                    </tr>
-                `;
-            });
-        }
-
         function createNew() {
             const name = document.getElementById('newName').value;
             const type = document.getElementById('newType').value;
