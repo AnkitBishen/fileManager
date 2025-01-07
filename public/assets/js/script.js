@@ -11,6 +11,7 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
                 data:   { path: $scope.path }
             }).then(function(response){
                 console.log(response);
+                $scope.dirList = response.data.data;
             }).catch(function(error){
                 console.log(error);
             });

@@ -52,15 +52,21 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Type</th>
                     <th>Size</th>
-                    <th>Permissions</th>
+                    <th>Path</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="fileList">
-                <!-- File list will be populated here -->
-                 {{v}}
+                <tr ng-repeat="dir in dirList track by $index">
+                    <td>{{ dir.name }}</td>
+                    <td>{{ dir.size }}</td>
+                    <td>{{ dir.path }}</td>
+                    <td>
+                        <button class="btn btn-outline-light" >Info</button>
+                        <button class="btn btn-outline-light" ng-click="deleteFile(dir.name)">Delete</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
