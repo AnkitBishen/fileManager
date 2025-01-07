@@ -7,7 +7,7 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
         if($scope.path != ""){
             $http({
                 url:   "http://localhost:8080/api/getlist",
-                method: "GET",
+                method: "POST",
                 data:   { path: $scope.path }
             }).then(function(response){
                 console.log(response);
