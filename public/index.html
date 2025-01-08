@@ -26,6 +26,36 @@
         .btn-outline-light:hover {
             color: #000;
         }
+        .img-width {
+            width: 25px;
+        }
+        .table-responsive{
+            max-height: 750px;
+            overflow: auto;
+            box-shadow: rgb(255 255 255 / 25%) 0px 40px 55px, rgb(255 255 255 / 12%) 0px -12px 30px, rgb(255 255 255 / 12%) 0px 4px 6px, rgb(255 255 255 / 17%) 0px 12px 13px, rgb(255 255 255 / 9%) 0px -3px 5px
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px rgb(255, 255, 255); 
+            border-radius: 10px;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: rgb(0, 0, 0); 
+            border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #000000; 
+        }
     </style>
 </head>
 <body ng-controller="fileManagerController">
@@ -48,27 +78,42 @@
             </div>
         </div>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Path</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="fileList">
-                <tr ng-repeat="dir in dirList track by $index">
-                    <td>{{ dir.name }}</td>
-                    <td>{{ dir.size }}</td>
-                    <td>{{ dir.path }}</td>
-                    <td>
-                        <button class="btn btn-outline-light" >Info</button>
-                        <button class="btn btn-outline-light" ng-click="deleteFile(dir.name)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive rounded">
+            <table class="table table-hover mb-0">
+                <thead class="position-sticky top-0">
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Date Modified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="fileList">
+                    <tr ng-repeat="dir in dirList track by $index">
+                        <td>
+                            <div class="d-flex gap-1 align-items-center">
+                                <span>
+                                    <img class="img-width" ng-src="{{ dir.type ? 'assets/icons/folder.svg' : 'assets/icons/file.svg' }}">
+                                </span>
+                                <span>{{ dir.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ dir.size }}</td>
+                        <td>{{ dir.dateModified }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <span>
+                                    <img class="img-width" src="assets/icons/information.svg">
+                                </span>
+                                <span>
+                                    <img class="img-width" src="assets/icons/trash.svg">
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Create Modal -->
@@ -82,19 +127,28 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="newName" class="form-label">Name</label>
-                        <input type="text" class="form-control bg-dark text-light" id="newName">
+                        <input type="text" class="form-control bg-dark text-light" id="newName" ng-model="manage_createDir.name">
                     </div>
-                    <div class="mb-3">
-                        <label for="newType" class="form-label">Type</label>
-                        <select class="form-select bg-dark text-light" id="newType">
-                            <option value="file">File</option>
-                            <option value="folder">Folder</option>
-                        </select>
+                    <div class="mb-3 d-flex gap-3">
+                        <div class="w-100">
+                            <label for="newType" class="form-label">Type</label>
+                            <select class="form-select bg-dark text-light" id="newType" ng-model="manage_createDir.type">
+                                <option value="file">File</option>
+                                <option value="folder">Folder</option>
+                            </select>
+                        </div>
+                        <div ng-show="manage_createDir.type == 'file'" class="w-100">
+                            <label for="extension" class="form-label">Extension</label>
+                            <select class="form-select bg-dark text-light" id="extension" ng-model="manage_createDir.extension">
+                                <option value=".txt">.txt</option>
+                                <option value=".dat">.dat</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="createNew()">Create</button>
+                    <button type="button" class="btn btn-primary" ng-click="createDir()">Create</button>
                 </div>
             </div>
         </div>
@@ -104,21 +158,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="assets/js/script.js"></script>
     
-    <script>
-        function createNew() {
-            const name = document.getElementById('newName').value;
-            const type = document.getElementById('newType').value;
-            // In a real application, this would make an AJAX call to the server
-            alert(`Creating new ${type}: ${name}`);
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
-            modal.hide();
-        }
-
-        function deleteFile(name) {
-            // In a real application, this would make an AJAX call to the server
-            alert(`Deleting: ${name}`);
-        }
-    </script>
 </body>
 </html>

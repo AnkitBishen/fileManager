@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+
 	// get config
 
 	// manage routes
@@ -19,8 +19,10 @@ func main() {
 	crosMux := crosMid.CorsMiddleware(router)
 
 	// start server
+	fmt.Println("server starting...")
 	err := http.ListenAndServe(":8080", crosMux)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
 }
