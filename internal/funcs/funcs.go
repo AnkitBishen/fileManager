@@ -37,3 +37,24 @@ func GetFolderAndFile(path string) ([]types.DirData, error) {
 
 	return data, nil
 }
+
+func CreateFileNFolder(rData types.ReqDirData) error {
+
+	if rData.Type == "file" {
+		slog.Info("Create file", "path", rData.CurrentDirPath+"\\"+rData.Name+rData.Extension)
+		f, err := os.Create(rData.CurrentDirPath + "\\" + rData.Name + rData.Extension)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+	} else {
+		slog.Info("Create folder", "path", rData.CurrentDirPath+"\\"+rData.Name)
+		err := os.Mkdir(rData.CurrentDirPath+"\\"+rData.Name, 0755)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

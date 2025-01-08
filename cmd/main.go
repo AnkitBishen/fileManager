@@ -15,6 +15,7 @@ func main() {
 	// manage routes
 	router := http.NewServeMux()
 	router.HandleFunc("POST /api/getlist", getFile.List())
+	router.HandleFunc("POST /api/createDir", getFile.CreateDir())
 
 	crosMux := crosMid.CorsMiddleware(router)
 

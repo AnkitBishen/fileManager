@@ -24,3 +24,10 @@ type ResponseSucc struct {
 	Status string      `json:"status"`
 	Data   interface{} `json:"data"`
 }
+
+type ReqDirData struct {
+	CurrentDirPath string
+	Name           string
+	Type           string
+	Extension      string
+}

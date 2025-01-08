@@ -5,23 +5,34 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
     $scope.manage_createDir = {
         name: "",
         type: "folder",
-        extension: ".txt"
+        extension: ".txt",
+        currentDirPath: ""
     }
     $scope.createDir = function(){
         if($scope.manage_createDir.name != ""){
             $http({
-                url:   "http://localhost:8080/api/gddetlist",
+                url:   "http://localhost:8080/api/createDir",
                 method: "POST",
-                data:   { data: $scope.manage_createDir },
+                data:   $scope.manage_createDir ,
                 header: { 'Content-Type': 'application/json' }
             }).then(function(response){
                 console.log(response);
+
+                if(response.data.status == "success"){
+                    alert(response.data.data)
+                    $scope.listFiles();
+                }
+                else{
+                    alert(response.data.data)
+                }
                 
                 // Close the modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
                 modal.hide();
             }).catch(function(error){
-                console.log(error);
+                if(error.status == 403){    
+                    alert(error.data.error)
+                }
             });
         }
         else{
@@ -42,6 +53,7 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
             }).then(function(response){
                 console.log(response);
                 $scope.dirList = response.data.data;
+                $scope.manage_createDir.currentDirPath = $scope.path
             }).catch(function(error){
                 console.log(error);
             });
