@@ -17,7 +17,7 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
                 data:   $scope.manage_createDir ,
                 header: { 'Content-Type': 'application/json' }
             }).then(function(response){
-                console.log(response);
+                // console.log(response);
 
                 if(response.data.status == "success"){
                     alert(response.data.data)
@@ -100,5 +100,30 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
         $scope.listFiles()
     }
 
-    
+
+    // delete file or folder
+    $scope.deleteDir = function(path){
+        $http({
+            url:   "http://localhost:8080/api/delete",
+            method: "POST",
+            data:   { currentDirPath: path },
+            header: { 'Content-Type': 'application/json' }
+        }).then(function(response){
+            if(response.data.status == "success"){
+                alert(response.data.data)
+                $scope.listFiles();
+            }
+            else{
+                alert(response.data.data)
+            }
+        }).catch(function(error){
+            // console.log(error);
+        });
+    }
+
+
+    // get properties
+    $scope.getProperties = function(dir){
+        $scope.propertyData = dir
+    }
 });

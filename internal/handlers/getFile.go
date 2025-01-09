@@ -60,3 +60,23 @@ func CreateDir() http.HandlerFunc {
 		response.WriteJson(w, http.StatusOK, response.Success(rData.Type+" created successfully."))
 	}
 }
+
+func Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var rData types.ReqDirData
+
+		err := json.NewDecoder(r.Body).Decode(&rData)
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.Error(err))
+			return
+		}
+
+		err = funcs.DeleteFileNFolder(rData)
+		if err != nil {
+			response.WriteJson(w, http.StatusInternalServerError, response.Error(err))
+			return
+		}
+
+		response.WriteJson(w, http.StatusOK, response.Success(rData.CurrentDirPath+" deleted successfully."))
+	}
+}

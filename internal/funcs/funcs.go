@@ -58,3 +58,13 @@ func CreateFileNFolder(rData types.ReqDirData) error {
 
 	return nil
 }
+
+func DeleteFileNFolder(rData types.ReqDirData) error {
+
+	err := os.RemoveAll(rData.CurrentDirPath)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

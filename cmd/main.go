@@ -16,6 +16,7 @@ func main() {
 	router := http.NewServeMux()
 	router.HandleFunc("POST /api/getlist", getFile.List())
 	router.HandleFunc("POST /api/createDir", getFile.CreateDir())
+	router.HandleFunc("POST /api/delete", getFile.Delete())
 
 	crosMux := crosMid.CorsMiddleware(router)
 
