@@ -56,6 +56,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #000000; 
         }
+        
+        .folderHover:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body ng-controller="fileManagerController">
@@ -67,6 +72,9 @@
 
     <div class="container mt-4">
         <div class="row mb-3">
+            <div class="col-auto" ng-show="backBtn == true">
+                <button class="btn btn-outline-light" ng-click="moveToFolder('out', '')">Back</button>
+            </div>
             <div class="col">
                 <input type="text" class="form-control bg-dark text-light" id="directoryInput" placeholder="Enter directory path" ng-model="path">
             </div>
@@ -95,7 +103,7 @@
                                 <span>
                                     <img class="img-width" ng-src="{{ dir.type ? 'assets/icons/folder.svg' : 'assets/icons/file.svg' }}">
                                 </span>
-                                <span>{{ dir.name }}</span>
+                                <span ng-class="{'folderHover': dir.type == true }" ng-click="dir.type && moveToFolder('in', dir.path)">{{ dir.name }}</span>
                             </div>
                         </td>
                         <td>{{ dir.size }}</td>

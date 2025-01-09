@@ -2,6 +2,7 @@ var fileManagerApp = angular.module('fileManagerApp', []);
 
 fileManagerApp.controller('fileManagerController', function($scope, $http) {
 
+    // create file and folders
     $scope.manage_createDir = {
         name: "",
         type: "folder",
@@ -41,7 +42,7 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
     }
 
 
-
+    // list sub folders and files
     $scope.dirList = [];
     $scope.listFiles = function(){
         if($scope.path != ""){
@@ -51,11 +52,16 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
                 data:   { path: $scope.path },
                 header: { 'Content-Type': 'application/json' }
             }).then(function(response){
-                console.log(response);
+                // console.log(response);
                 $scope.dirList = response.data.data;
                 $scope.manage_createDir.currentDirPath = $scope.path
+
+                if($scope.perviousFolderPaths.length == 0){
+                    $scope.perviousFolderPaths.push($scope.path)
+                }
+
             }).catch(function(error){
-                console.log(error);
+                // console.log(error);
             });
         }
         else{
@@ -63,5 +69,36 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
         }
         
     }
+   
+    
+    // navigate to sub folder and pervious folder
+    $scope.backBtn = false;
+    $scope.perviousFolderPaths = [];
+    $scope.moveCount = 0
+    $scope.moveToFolder = function(action, path){
+
+        if(action == 'in'){
+            $scope.backBtn = true;
+            $scope.perviousFolderPaths.push(path)
+            $scope.path = path
+            $scope.moveCount++
+
+        }else{
+            if($scope.perviousFolderPaths.length > 1){
+                $scope.perviousFolderPaths.pop()
+            }
+            $scope.path = $scope.perviousFolderPaths.slice(-1)[0]
+            $scope.moveCount--
+        }
+
+        if($scope.moveCount == 0){
+            $scope.backBtn = false;
+        }
+
+        
+        // load sub folders
+        $scope.listFiles()
+    }
+
     
 });
