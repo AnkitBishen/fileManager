@@ -24,12 +24,19 @@ func GetFolderAndFile(path string) ([]types.DirData, error) {
 			return nil, err
 		}
 
+		// convert file size in bytes to KB
+		fSizeInBytes := finfo.Size()
+		fSizeInKB := int64(fSizeInBytes) / 1024
+
+		// decode file permission
+		permissionString := os.FileMode(finfo.Mode()).Perm().String()
+
 		data = append(data, types.DirData{
 			Name:         d.Name(),
-			Size:         finfo.Size(),
+			Size:         fSizeInKB,
 			Type:         finfo.IsDir(),
 			Path:         path + "\\" + d.Name(),
-			Permission:   finfo.Mode().Perm(),
+			Permission:   permissionString,
 			DateModified: finfo.ModTime().Format("2006-01-02 15:04:05"),
 		})
 
@@ -62,6 +69,16 @@ func CreateFileNFolder(rData types.ReqDirData) error {
 func DeleteFileNFolder(rData types.ReqDirData) error {
 
 	err := os.RemoveAll(rData.CurrentDirPath)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func RenameFileNFolder(rData types.RenameData) error {
+
+	err := os.Rename(rData.OldName, rData.NewName)
 	if err != nil {
 		return err
 	}

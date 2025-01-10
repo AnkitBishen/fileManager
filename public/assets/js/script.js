@@ -125,5 +125,43 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
     // get properties
     $scope.getProperties = function(dir){
         $scope.propertyData = dir
+        $scope.new_dirName = dir.name
+    }
+
+    $scope.renameDir = function(dir){
+
+         // rename file or folder
+         if($scope.new_dirName.trim() != dir.name.trim()){
+            // create new path of new name
+            var newPath = dir.path.replace(dir.name, $scope.new_dirName)
+
+            var details = {
+                oldName: dir.path,
+                newName: newPath
+            }
+
+            $http({
+                url:   "http://localhost:8080/api/rename",
+                method: "POST",
+                data:   details,
+                header: { 'Content-Type': 'application/json' }
+            }).then(function(response){
+                if(response.data.status == "success"){
+                    alert(response.data.data)
+                    $scope.listFiles();
+
+
+                    // Close the modal
+                    const propModal = bootstrap.Modal.getInstance(document.getElementById('propertiesModal'));
+                    propModal.hide();
+                }
+                else{
+                    alert(response.data.data)
+                }
+            }).catch(function(error){
+                // console.log(error);
+            });
+        }
+
     }
 });

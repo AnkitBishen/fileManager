@@ -51,7 +51,7 @@
                                 <span ng-class="{'folderHover': dir.type == true }" ng-click="dir.type && moveToFolder('in', dir.path)">{{ dir.name }}</span>
                             </div>
                         </td>
-                        <td>{{ dir.size }}</td>
+                        <td>{{ dir.size }} Kb</td>
                         <td>{{ dir.dateModified }}</td>
                         <td>
                             <div class="d-flex gap-2">
@@ -123,9 +123,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="newName" class="form-label">Name</label>
-                        <input type="text" class="form-control bg-dark text-light" id="newName" ng-model="manage_createDir.name">
+                    <div class="mb-3 d-flex align-items-center gap-2" >
+                        <img ng-src="{{propertyData.type ? 'assets/icons/folder.svg' : 'assets/icons/file.svg'}}" alt="" srcset="">
+                        <input type="text" class="form-control bg-dark text-light" id="newName" ng-model="new_dirName">
                     </div>
                     <div class="mb-2 ">
                         <label for="newName" class="form-label">Type of file:</label>
@@ -137,16 +137,20 @@
                     </div>
                     <div class="mb-2 ">
                         <label for="newName" class="form-label">Size:</label>
-                        <span>{{propertyData.size}}</span>
+                        <span>{{propertyData.size}} Kb</span>
                     </div>
                     <div class="mb-2 ">
                         <label for="newName" class="form-label">Created:</label>
                         <span>{{propertyData.dateModified}}</span>
                     </div>
+                    <div class="mb-2 ">
+                        <label for="newName" class="form-label">Permission:</label>
+                        <span>{{propertyData.permission}}</span>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Ok</button>
+                    <button type="button" class="btn btn-primary" ng-click="renameDir(propertyData)">Ok</button>
                 </div>
             </div>
         </div>

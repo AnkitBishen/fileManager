@@ -80,3 +80,23 @@ func Delete() http.HandlerFunc {
 		response.WriteJson(w, http.StatusOK, response.Success(rData.CurrentDirPath+" deleted successfully."))
 	}
 }
+
+func Rename() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var rData types.RenameData
+
+		err := json.NewDecoder(r.Body).Decode(&rData)
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.Error(err))
+			return
+		}
+
+		err = funcs.RenameFileNFolder(rData)
+		if err != nil {
+			response.WriteJson(w, http.StatusInternalServerError, response.Error(err))
+			return
+		}
+
+		response.WriteJson(w, http.StatusOK, response.Success(rData.NewName+" changed successfully."))
+	}
+}
