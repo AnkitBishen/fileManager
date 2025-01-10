@@ -3,6 +3,7 @@ package funcs
 import (
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/AnkitBishen/fileManagerApp/internal/types"
 )
@@ -28,8 +29,34 @@ func GetFolderAndFile(path string) ([]types.DirData, error) {
 		fSizeInBytes := finfo.Size()
 		fSizeInKB := int64(fSizeInBytes) / 1024
 
+		// fileMode := fileInfo.Mode()
+		// fmt.Println("Owner read:", fileMode&0400 != 0)
+		// fmt.Println("Owner write:", fileMode&0200 != 0)
+		// fmt.Println("Owner execute:", fileMode&0100 != 0)
+		// fmt.Println("Group read:", fileMode&0040 != 0)
+		// fmt.Println("Group write:", fileMode&0020 != 0)
+		// fmt.Println("Group execute:", fileMode&0010 != 0)
+		// fmt.Println("Others read:", fileMode&0004 != 0)
+		// fmt.Println("Others write:", fileMode&0002 != 0)
+		// fmt.Println("Others execute:", fileMode&0001 != 0)
+
 		// decode file permission
-		permissionString := os.FileMode(finfo.Mode()).Perm().String()
+		var permissionArr []string
+		fileMode := finfo.Mode()
+
+		if fileMode&0400 != 0 {
+			permissionArr = append(permissionArr, "Read")
+		}
+
+		if fileMode&0200 != 0 {
+			permissionArr = append(permissionArr, "Write")
+		}
+
+		if fileMode&0100 != 0 {
+			permissionArr = append(permissionArr, "Execute")
+		}
+
+		permissionString := strings.Join(permissionArr, ", ")
 
 		data = append(data, types.DirData{
 			Name:         d.Name(),
