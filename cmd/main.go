@@ -1,8 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
+	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/AnkitBishen/fileManagerApp/internal/crosMid"
 	getFile "github.com/AnkitBishen/fileManagerApp/internal/handlers"
@@ -19,13 +25,40 @@ func main() {
 	router.HandleFunc("POST /api/delete", getFile.Delete())
 	router.HandleFunc("POST /api/rename", getFile.Rename())
 
+	// handle cros errors
 	crosMux := crosMid.CorsMiddleware(router)
 
-	// start server
-	fmt.Println("server starting...")
-	err := http.ListenAndServe(":8080", crosMux)
-	if err != nil {
-		fmt.Println(err.Error())
+	// start server in go routine ----
+	server := http.Server{
+		Addr:    ":8080",
+		Handler: crosMux,
 	}
+
+	slog.Info("running server", slog.String("address", server.Addr))
+
+	done := make(chan os.Signal, 1)
+
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil {
+			log.Fatal("failed to start server")
+		}
+	}()
+
+	<-done
+
+	slog.Info("shutting down the server")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	err := server.Shutdown(ctx)
+	if err != nil {
+		slog.Error("failed to shut down server", slog.String("error", err.Error()))
+	}
+
+	slog.Info("server shutdown successfully...")
 
 }

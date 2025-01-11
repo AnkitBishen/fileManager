@@ -8,6 +8,8 @@ import (
 	"github.com/AnkitBishen/fileManagerApp/internal/types"
 )
 
+// GetFolderAndFile get list of files and folders
+// params path string and function return list of files and folders or error
 func GetFolderAndFile(path string) ([]types.DirData, error) {
 	slog.Info("Get function list of files and folders", "path", path)
 
@@ -72,6 +74,7 @@ func GetFolderAndFile(path string) ([]types.DirData, error) {
 	return data, nil
 }
 
+// CreateFileNFolder create file and folder
 func CreateFileNFolder(rData types.ReqDirData) error {
 
 	if rData.Type == "file" {
@@ -93,6 +96,7 @@ func CreateFileNFolder(rData types.ReqDirData) error {
 	return nil
 }
 
+// DeleteFileNFolder delete file and folder
 func DeleteFileNFolder(rData types.ReqDirData) error {
 
 	err := os.RemoveAll(rData.CurrentDirPath)
@@ -103,6 +107,7 @@ func DeleteFileNFolder(rData types.ReqDirData) error {
 	return nil
 }
 
+// RenameFileNFolder rename file and folder
 func RenameFileNFolder(rData types.RenameData) error {
 
 	err := os.Rename(rData.OldName, rData.NewName)

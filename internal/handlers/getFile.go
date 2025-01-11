@@ -12,6 +12,7 @@ import (
 	"github.com/AnkitBishen/fileManagerApp/internal/types"
 )
 
+// Handler func for get List of files and folders
 func List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		slog.Info("handler Get list of files and folders", "path", r.URL.Path)
@@ -37,6 +38,7 @@ func List() http.HandlerFunc {
 	}
 }
 
+// Handler func for create folder and files
 func CreateDir() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -61,6 +63,7 @@ func CreateDir() http.HandlerFunc {
 	}
 }
 
+// Handler func for delete folder and files
 func Delete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var rData types.ReqDirData
@@ -81,6 +84,7 @@ func Delete() http.HandlerFunc {
 	}
 }
 
+// Handler func for Rename folder and files
 func Rename() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var rData types.RenameData
