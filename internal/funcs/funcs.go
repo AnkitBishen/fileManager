@@ -8,23 +8,31 @@ import (
 	"github.com/AnkitBishen/fileManagerApp/internal/types"
 )
 
+type Result struct {
+	TotalFiles   int             `json:"totalFiles"`
+	TotalFolders int             `json:"totalFolders"`
+	DirData      []types.DirData `json:"dirData"`
+}
+
 // GetFolderAndFile get list of files and folders
 // params path string and function return list of files and folders or error
-func GetFolderAndFile(path string) ([]types.DirData, error) {
+func GetFolderAndFile(path string) (Result, error) {
 	slog.Info("Get function list of files and folders", "path", path)
 
 	dirList, err := os.ReadDir(path)
 	if err != nil {
-		return nil, err
+		return Result{}, err
 	}
 
 	var data []types.DirData
+	var totalFiles int = 0
+	var totalFolders int = 0
 
 	for _, d := range dirList {
 
 		finfo, err := os.Stat(path + "\\" + d.Name())
 		if err != nil {
-			return nil, err
+			return Result{}, err
 		}
 
 		// convert file size in bytes to KB
@@ -69,9 +77,21 @@ func GetFolderAndFile(path string) ([]types.DirData, error) {
 			DateModified: finfo.ModTime().Format("2006-01-02 15:04:05"),
 		})
 
+		// count total number of files and folders
+		if finfo.IsDir() {
+			totalFolders++
+		} else {
+			totalFiles++
+		}
+
+	}
+	result := Result{
+		TotalFiles:   totalFiles,
+		TotalFolders: totalFolders,
+		DirData:      data,
 	}
 
-	return data, nil
+	return result, nil
 }
 
 // CreateFileNFolder create file and folder

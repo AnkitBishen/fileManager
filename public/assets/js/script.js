@@ -53,7 +53,9 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
                 header: { 'Content-Type': 'application/json' }
             }).then(function(response){
                 // console.log(response);
-                $scope.dirList = response.data.data;
+                $scope.dirList = response.data.data.dirData;
+                $scope.totalFiles = response.data.data.totalFiles;
+                $scope.totalFolders = response.data.data.totalFolders;
                 $scope.manage_createDir.currentDirPath = $scope.path
 
                 if($scope.perviousFolderPaths.length == 0){
