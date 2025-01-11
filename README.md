@@ -41,7 +41,7 @@
     <ol>
         <li>Clone the repository:
             <pre><code>git clone https://github.com/AnkitBishen/fileManager.git 
-cd fileManager-api</code></pre>
+cd fileManager</code></pre>
         </li>
         <li>Build and run the application:
             <pre><code>go run ./cmd/main.go</code></pre>
