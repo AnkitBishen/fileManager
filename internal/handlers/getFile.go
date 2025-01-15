@@ -104,3 +104,24 @@ func Rename() http.HandlerFunc {
 		response.WriteJson(w, http.StatusOK, response.Success(rData.NewName+" changed successfully."))
 	}
 }
+
+// Handler func for Read file content
+func Read() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var path types.PathT
+
+		err := json.NewDecoder(r.Body).Decode(&path)
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.Error(err))
+			return
+		}
+
+		content, err := funcs.ReadFile(path.Path)
+		if err != nil {
+			response.WriteJson(w, http.StatusInternalServerError, response.Error(err))
+			return
+		}
+
+		response.WriteJson(w, http.StatusOK, response.Success(content))
+	}
+}

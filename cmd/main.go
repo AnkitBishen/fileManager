@@ -24,6 +24,7 @@ func main() {
 	router.HandleFunc("POST /api/createDir", getFile.CreateDir())
 	router.HandleFunc("POST /api/delete", getFile.Delete())
 	router.HandleFunc("POST /api/rename", getFile.Rename())
+	router.HandleFunc("POST /api/read", getFile.Read())
 
 	// handle cros errors
 	crosMux := crosMid.CorsMiddleware(router)

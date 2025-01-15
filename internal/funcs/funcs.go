@@ -137,3 +137,13 @@ func RenameFileNFolder(rData types.RenameData) error {
 
 	return nil
 }
+
+// Read file content
+func ReadFile(filePath string) (string, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", err
+	}
+	contentWithBreaks := strings.ReplaceAll(string(content), "\n", "<br>")
+	return contentWithBreaks, nil
+}

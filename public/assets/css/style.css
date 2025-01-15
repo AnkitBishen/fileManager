@@ -54,3 +54,9 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.custom-modal-size{
+    max-height: 500px;
+    min-width: 500px;
+    overflow: auto;
+}

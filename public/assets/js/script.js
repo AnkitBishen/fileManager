@@ -1,6 +1,6 @@
 var fileManagerApp = angular.module('fileManagerApp', []);
 
-fileManagerApp.controller('fileManagerController', function($scope, $http) {
+fileManagerApp.controller('fileManagerController', function($scope, $http, $sce) {
 
     // create file and folders
     $scope.manage_createDir = {
@@ -166,4 +166,24 @@ fileManagerApp.controller('fileManagerController', function($scope, $http) {
         }
 
     }
+
+
+    $scope.isFileContextLoaded = false;
+    $scope.getFileContent = function(path, name){
+        $scope.isFileContextLoaded = true;
+        $http({
+            url:   "http://localhost:8080/api/read",
+            method: "POST",
+            data:   { path: path },
+            header: { 'Content-Type': 'application/json' }
+        }).then(function(response){
+            $scope.isFileContextLoaded = false;
+            $scope.fileContentName = name
+            $scope.fileContent = response.data.data
+            // $scope.fileContent = $sce.trustAsHtml(response.data.data);
+        }).catch(function(error){
+            $scope.isFileContextLoaded = false;
+            console.log(error);
+        });
+    }   
 });
