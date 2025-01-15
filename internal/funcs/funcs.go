@@ -144,6 +144,6 @@ func ReadFile(filePath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	contentWithBreaks := strings.ReplaceAll(string(content), "\n", "<br>")
-	return contentWithBreaks, nil
+	// contentWithBreaks := strings.ReplaceAll(string(content), "\n", "<br>")
+	return string(content), nil
 }

@@ -179,7 +179,9 @@ fileManagerApp.controller('fileManagerController', function($scope, $http, $sce)
         }).then(function(response){
             $scope.isFileContextLoaded = false;
             $scope.fileContentName = name
-            $scope.fileContent = response.data.data
+            // $scope.fileContent = response.data.data
+            var fileContentArea = document.getElementById("fileContentArea");
+            fileContentArea.innerText = response.data.data
             // $scope.fileContent = $sce.trustAsHtml(response.data.data);
         }).catch(function(error){
             $scope.isFileContextLoaded = false;
